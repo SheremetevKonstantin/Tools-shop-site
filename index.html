@@ -1,0 +1,64 @@
+<?php
+session_start();
+if(empty($_SESSION['login'])){
+	header('Location: login.php');
+}
+$Privilege;
+Switch($_SESSION["privilege"]){
+	case 0: $Privilege = "Пользователь"; break;
+	case 1: $Privilege = "Админ"; break;
+	case 2: $Privilege = "Полные права"; break;
+}
+require_once("assets/Group_info.php"); 
+if(isset($_POST['loguotBTN'])){
+	require_once "logout.php";
+}
+if(isset($_POST['RecordDelBTN'])){
+	echo "<script>location.replace('delMarked.php');</script>";
+}
+if(isset($_POST['groupDelBTN'])){
+	$query = "Update category Set category_status = '0' Where category_category = '{$_POST['text']}';";
+	$result = mysqli_query($conn, $query);
+							echo <<<HTML
+		<meta charset='utf-8'>
+		<link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+		<br>
+		<div class="alert alert-success" role="alert">
+			Запись помечена на удаление.
+		</div>	
+HTML;
+	sleep(2);
+	echo "<script>location.replace('index.html');</script>";
+}
+
+
+?>
+
+<!doctype.html>
+<html>
+<head>
+<title>Хозяин</title>
+<meta charset=utf-8>
+<link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+</head>
+	<body style="background-color:#e3e8e8;">
+	<div class="container">
+			<?php require_once("assets/header.php") ?>
+		<div class="Main">
+			<div class="Nav">
+				<div class="Official">
+					<a href="index.html" style="padding-left: 1em;">Главная</a>
+				</div>
+				<div style="margin-left: 66%">
+				<?php require_once("assets/AddProdBNT.php") ?>			
+				</div>
+			</div>
+			<div class="Content">
+				<?php require_once("assets/group.php") ?>	
+			</div>				
+			</div>
+		</div>
+	</div>
+	</body>
+</html>
+
